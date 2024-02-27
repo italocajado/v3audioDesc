@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
   const captureButton = document.getElementById('capture-button');
   const cameraStream = document.getElementById('camera-stream');
@@ -10,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const apiKey = '05d2086b9f244bbd80c575c5a39e10ad';
 
   // Acessar a câmera do usuário
-  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+  navigator.mediaDevices &&
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
     .then(stream => {
       cameraStream.srcObject = stream;
       captureButton.addEventListener('click', captureImage);
