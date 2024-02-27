@@ -21,15 +21,29 @@ function captureImage() {
   canvas.width = cameraStream.videoWidth;
   canvas.height = cameraStream.videoHeight;
   context.drawImage(cameraStream, 0, 0, canvas.width, canvas.height);
-  const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-  analyzeImage(imageData);
+  
+  // Convert the canvas to a Data URL
+  const dataUrl = canvas.toDataURL('image/jpeg');
+
+  // Convert the Data URL to a Blob
+  const blob = dataURLToBlob(dataUrl);
+
+  analyzeImage(blob);
+}
+
+function dataURLToBlob(dataUrl) {
+  const arr = dataUrl.split(','), mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length; // change 'const' to 'let'
+  const u8arr = new Uint8Array(n);
+  while(n--){
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], {type:mime});
 }
 
 // Analyze the captured image
-async function analyzeImage(imageData) {
-  // Create a new Blob object from the image data
-  const blob = new Blob([imageData.data], { type: 'image/jpeg' });
-
+async function analyzeImage(blob) {
   // Create a new FormData object and append the Blob object to it
   const formData = new FormData();
   formData.append('image', blob);
