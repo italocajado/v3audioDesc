@@ -49,19 +49,26 @@ async function analyzeImage(blob) {
   formData.append('image', blob);
 
   // Send a POST request to the Azure Computer Vision API
-  const response = await fetch(`${endpoint}/vision/v3.2/analyze?visualFeatures=Categories,Description,Tags`, {
-    method: 'POST',
-    headers: {
-      'Ocp-Apim-Subscription-Key': apiKey
-    },
-    body: formData
-  });
+  const response = await fetch(`${endpoint}/vision/v3.2/analyze?visualFeatures=Categories,Description,Tags&language=pt`, {
+  method: 'POST',
+  headers: {
+    'Ocp-Apim-Subscription-Key': apiKey
+  },
+  body: formData
+});
 
   // Parse the response and display the result
   const data = await response.json();
   result.innerHTML = `
-    <p>Description: ${data.description.captions[0].text}</p>
-    <p>Categories: ${data.categories.map(c => c.name).join(', ')}</p>
-    <p>Tags: ${data.tags.map(t => t.name).join(', ')}</p>
+    <p>O que estou vendo:${data.description.captions[0].text}</p>
   `;
+  textoFalado(1.5);
+}
+
+async function textoFalado(rate){
+  const text = document.querySelector('p').textContent;
+  const synth = window.speechSynthesis;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = rate;
+  synth.speak(utterance);
 }
