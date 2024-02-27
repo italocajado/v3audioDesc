@@ -11,10 +11,15 @@ body {
     width: 100%;
     max-width: 640px;
     height: auto;
+    margin: 10px;
   }
   #capture-button {
     margin-top: 10px;
+    font-size: large;
+    height: 250px;
+    width: 250px;
   }
   #result {
     margin-top: 20px;
+    font-size: 36px;
   }
